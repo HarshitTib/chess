@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Pieces from '../../components/Pieces'
 import './Board.css'
 import ChessMove, { KingCheck } from './ChessMove'
+import Checkmate from './Checkmate'
 
 var matrix_row = ['8', '7', '6', '5', '4', '3', '2', '1']
 var matrix_col = ['a','b','c','d','e','f','g','h']
@@ -51,17 +52,18 @@ function Board() {
         {
             setClick(0)
         }
-        else if(ChessMove(activePiece,currentPiece,x,y))
+        else if(ChessMove(activePiece,x,y)) // If it is a valid move
         {
+            // console.log(currentPiece, activePiece)
             let x1,y1,x2,y2
-            if(!currentPiece)
+            if(!currentPiece) // If it is an empty block
             {
                 x1 = Pieces[activePiece]["position_x"] // prev value of the activePiece in x
                 y1 = Pieces[activePiece]["position_y"] // prev value of the activePiece in y
                 Pieces[activePiece]["position_x"] = x
                 Pieces[activePiece]["position_y"] = y
             }
-            else if((Pieces[activePiece]["color"] !== Pieces[currentPiece]["color"])) 
+            else if((Pieces[activePiece]["color"] !== Pieces[currentPiece]["color"])) //If it contains the alternate piece
             {
                 x1 = Pieces[activePiece]["position_x"] // prev value of the activePiece in x
                 y1 = Pieces[activePiece]["position_y"] // prev value of the activePiece in y
@@ -72,7 +74,9 @@ function Board() {
                 Pieces[currentPiece]["position_x"] = "-1"
                 Pieces[currentPiece]["position_y"] = "-1"
             }
-            if((KingCheck())[1] && Pieces[activePiece]["color"] === (KingCheck())[0])
+            let [current_king, check_giver, king_is_checked] = KingCheck()
+            let king_color = current_king ? Pieces[current_king]["color"] : ""
+            if(king_is_checked && Pieces[activePiece]["color"] === king_color) // When you deliberately want to apply check to your king
             {
                 if(!currentPiece)
                 {
@@ -90,10 +94,9 @@ function Board() {
                 setClick(0)
                 setRender(render+1)
             }
-            // console.log(Check()[1])
-            else if(check)
+            else if(check) // Once it is checked, check for the next step
             {
-                if((KingCheck())[1])
+                if(king_is_checked) // If the next move give rise to the check, revert back
                 {
                     if(!currentPiece)
                     {
@@ -108,7 +111,7 @@ function Board() {
                         Pieces[currentPiece]["position_y"] = y2
                     }
                 }
-                else
+                else // check got eliminated
                 {
                     setClick(0)
                     setCheck(false)
@@ -116,11 +119,12 @@ function Board() {
                     setPlayer1(!player1)
                 }
             }
-            else
+            else // When the king is not checked
             {
-                if((KingCheck())[1])
+                if(king_is_checked) // And the next move make the king to check
                 {
                     setCheck(true)
+                    Checkmate(current_king, check_giver)
                     console.log("King is checked")
                 }
                 setClick(0)
@@ -155,13 +159,20 @@ function Board() {
                     if((i+j)%2 === 0)
                     {
                         matrix[i][j] = <div className='box-design color-white' tabIndex={[i,j]} key = {[i,j]} chess-piece={image} 
-                        onClick={(event) => Toggle(event.target,x,y)}>
+                        onClick={(event) => Toggle(event.target,x,y)}
+                        style = {{
+                            backgroundColor: check ? ((KingCheck())[0] === image) ? "rgba(193, 0, 0, 0.724)" : "" : ""
+                        }}>
+                        
                         <img chess-piece={image} src={image_img} alt={image}/></div>
                     }   
                     else
                     {
                         matrix[i][j] = <div className='box-design color-blue' tabIndex={[i,j]} key = {[i,j]} chess-piece={image} 
-                        onClick={(event) => Toggle(event.target,x,y)}>
+                        onClick={(event) => Toggle(event.target,x,y)}
+                        style = {{
+                            backgroundColor: check ? ((KingCheck())[0] === image) ? "rgba(193, 0, 0, 0.724)" : "" : ""
+                        }}>
                         <img chess-piece={image} src={image_img} alt={image}/></div>
                     }
                 }

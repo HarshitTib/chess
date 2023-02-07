@@ -1,36 +1,51 @@
 import Pieces from '../../components/Pieces'
 
-function PawnMove(int_xd, int_xs, int_yd, int_ys, activePiece, currentPiece)
+export function CheckPiece(x, y)
 {
+    let temp = ""
+    let pieces = Object.entries(Pieces)
+    pieces.map((key) => {
+        if(key[1]["position_x"] === String(x) && key[1]["position_y"] === String.fromCharCode(y))
+        {
+            temp = key
+        }
+        return []
+    })
+    return temp
+}
+
+export function PawnMove(int_xd, int_xs, int_yd, int_ys, activePiece)
+{
+    // console.log(activePiece)
     let con = false
     let diff_x = int_xd - int_xs
     let diff_y = Math.abs(int_ys - int_yd)
     if(Pieces[activePiece]["color"] === "white")
     {
-        if(int_xs === 2 && (diff_x === 1 || diff_x === 2) && diff_y === 0 && (currentPiece === null ||(currentPiece !== null && Pieces[currentPiece]["color"] !== "black")))
+        if(int_xs === 2 && (diff_x === 1 || (diff_x === 2 && !CheckPiece(int_xd-1, int_yd))) && diff_y === 0 && !CheckPiece(int_xd, int_yd))
         {
             con = true
         }
-        else if(diff_x === 1 && diff_y === 0 && (currentPiece === null ||(currentPiece !== null && Pieces[currentPiece]["color"] !== "black")))
+        else if(diff_x === 1 && diff_y === 0 && !CheckPiece(int_xd, int_yd))
         {
             con = true
         }
-        else if(diff_x === 1 && Math.abs(diff_y) === 1 &&(currentPiece !== null && Pieces[currentPiece]["color"] === "black"))
+        else if(diff_x === 1 && Math.abs(diff_y) === 1 && (CheckPiece(int_xd, int_yd) && CheckPiece(int_xd, int_yd))[0].includes("black"))
         {
             con = true
         }
     }
     else if(Pieces[activePiece]["color"] === "black")
     {
-        if(int_xs === 7 && (diff_x === -1 || diff_x === -2)  && diff_y === 0 && (currentPiece === null ||(currentPiece !== null && Pieces[currentPiece]["color"] !== "white")))
+        if(int_xs === 7 && (diff_x === -1 || (diff_x === -2 && !CheckPiece(int_xd+1, int_yd)))  && diff_y === 0 && !CheckPiece(int_xd, int_yd))
         {
             con = true
         }
-        else if(diff_x === -1 && diff_y === 0 && (currentPiece === null ||(currentPiece !== null && Pieces[currentPiece]["color"] !== "white")))
+        else if(diff_x === -1 && diff_y === 0 && !CheckPiece(int_xd, int_yd))
         {
             con = true
         }
-        else if(diff_x === -1 && Math.abs(diff_y) === 1 &&(currentPiece !== null && Pieces[currentPiece]["color"] === "white"))
+        else if(diff_x === -1 && Math.abs(diff_y) === 1 && (CheckPiece(int_xd, int_yd) && (CheckPiece(int_xd, int_yd))[0].includes("white")))
         {
             con = true
         }
@@ -38,7 +53,7 @@ function PawnMove(int_xd, int_xs, int_yd, int_ys, activePiece, currentPiece)
     return con
 }
 
-function RookMove(int_xd, int_xs, int_yd, int_ys)
+export function RookMove(int_xd, int_xs, int_yd, int_ys)
 {
     var con = [true]
     if(int_xs === int_xd)
@@ -80,7 +95,7 @@ function RookMove(int_xd, int_xs, int_yd, int_ys)
     return con[0]
 }
 
-function BishopMove(int_xd, int_xs, int_yd, int_ys)
+export function BishopMove(int_xd, int_xs, int_yd, int_ys)
 {
     var con = [true]
     let diff_x = Math.abs(int_xs - int_xd)
@@ -131,7 +146,7 @@ function BishopMove(int_xd, int_xs, int_yd, int_ys)
     return con[0]
 }
 
-function KnightMove(int_xd, int_xs, int_yd, int_ys)
+export function KnightMove(int_xd, int_xs, int_yd, int_ys)
 {
     let con = true
     let diff_x = Math.abs(int_xs - int_xd)
@@ -147,7 +162,7 @@ function KnightMove(int_xd, int_xs, int_yd, int_ys)
     return con
 }
 
-function KingMove(int_xd, int_xs, int_yd, int_ys)
+export function KingMove(int_xd, int_xs, int_yd, int_ys)
 {
     let con = false
     let diff_x = Math.abs(int_xs - int_xd)
@@ -161,7 +176,7 @@ function KingMove(int_xd, int_xs, int_yd, int_ys)
 
 export function KingCheck()
 {  
-    let con = ["",false]
+    let con = ["",[],false] // current King, Chess Piece who gives the check, check
     var king = []
     var piece = Object.entries(Pieces)
     piece.map((key) =>
@@ -190,48 +205,54 @@ export function KingCheck()
                 {
                     if(PawnMove(int_xd,int_xs,int_yd,int_ys,key[0],currentKing[0]))
                     {
-                        con[0] = king_color
-                        con[1] = true
+                        con[0] = currentKing[0]
+                        con[1].push(key[0])
+                        con[2] = true
                     }
                 }
-                else if(key[0].includes("rook"))
+                if(key[0].includes("rook"))
                 {
                     if(RookMove(int_xd,int_xs,int_yd,int_ys))
                     {
-                        con[0] = king_color
-                        con[1] = true
+                        con[0] = currentKing[0]
+                        con[1].push(key[0])
+                        con[2] = true
                     }
                 }
-                else if(key[0].includes("bishop"))
+                if(key[0].includes("bishop"))
                 {
                     if(BishopMove(int_xd,int_xs,int_yd,int_ys))
                     {
-                        con[0] = king_color
-                        con[1] = true
+                        con[0] = currentKing[0]
+                        con[1].push(key[0])
+                        con[2] = true
                     }
                 }
-                else if(key[0].includes("knight"))
+                if(key[0].includes("knight"))
                 {
                     if(KnightMove(int_xd,int_xs,int_yd,int_ys))
                     {
-                        con[0] = king_color
-                        con[1] = true
+                        con[0] = currentKing[0]
+                        con[1].push(key[0])
+                        con[2] = true
                     }
                 }
-                else if(key[0].includes("queen"))
+                if(key[0].includes("queen"))
                 {
                     if(RookMove(int_xd,int_xs,int_yd,int_ys) || BishopMove(int_xd,int_xs,int_yd,int_ys))
                     {
-                        con[0] = king_color
-                        con[1] = true
+                        con[0] = currentKing[0]
+                        con[1].push(key[0])
+                        con[2] = true
                     }
                 }
-                else if(key[0].includes("king"))
+                if(key[0].includes("king"))
                 {
                     if(KingMove(int_xd,int_xs,int_yd,int_ys))
                     {
-                        con[0] = king_color
-                        con[1] = true
+                        con[0] = currentKing[0]
+                        con[1].push(key[0])
+                        con[2] = true
                     }
                 }
             }
@@ -242,7 +263,7 @@ export function KingCheck()
 }
 
 
-function ChessMove(activePiece,currentPiece,x,y) {
+function ChessMove(activePiece,x,y) {
 
     var cond = false
     var int_xd1 = parseInt(x) // Destination x
@@ -267,7 +288,7 @@ function ChessMove(activePiece,currentPiece,x,y) {
     }
     else if(activePiece.includes("pawn"))
     {
-        cond = PawnMove(int_xd1, int_xs1, int_yd1, int_ys1, activePiece, currentPiece)
+        cond = PawnMove(int_xd1, int_xs1, int_yd1, int_ys1, activePiece)
     }
     else if(activePiece.includes("king"))
     {
