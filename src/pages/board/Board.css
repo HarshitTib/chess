@@ -1,0 +1,61 @@
+.color-blue
+{
+    background-color: rgb(37, 114, 190);
+    color: wheat;
+}
+.color-white
+{
+    background-color: whitesmoke;
+    color: black;
+}
+.box-design
+{
+    border: 2px solid black;
+    border-radius: .5px;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: grid;
+    place-content: center;
+    cursor : pointer
+}
+.box-design > div
+{
+    width: 3.5vw;
+    height: 3.5vw;
+    margin: auto;
+    padding-top: 25%;
+    
+}
+
+.matrix-design {
+    display: grid;
+    grid-template-columns: repeat(8, 5.5vw);
+    grid-template-rows: repeat(8, 5.5vw);
+    justify-content: center;
+    padding: 2vw;
+    text-align: center;
+    /* background-color: rgb(27, 26, 26); */
+    width: 100vw;
+    height: 43vw;
+}
+.box-design:focus{
+    background-color: rgba(193, 0, 0, 0.724);
+}
+
+.color-brown
+{
+background-color: brown;
+}
+
+.players
+{
+    background-color: aqua;
+    text-align: center;
+    margin-bottom: 2vw;
+    padding: 0.5vw;
+    font-size: large;
+    margin-left: 30%;
+    margin-right: 25%;
+    font-weight: bold;
+    color: rgb(0, 10, 0);
+}
