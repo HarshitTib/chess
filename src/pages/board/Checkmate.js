@@ -1,6 +1,7 @@
 import React from 'react'
 import Pieces from '../../components/Pieces'
-import ChessMove, { CheckPiece, KingCheck } from './ChessMove'
+import ChessMove, { CheckPiece } from './ChessMove'
+import KingCheck from './KingCheck'
 let x1,y1,x2,y2
 function MakeAMove(currentPiece, activePiece, x, y)
 {
@@ -73,10 +74,15 @@ function Checkmate(current_king) {
         for(let j=97; j<=104; j++)
         {
           cond = ValidMove(key,i,j)
-          if(cond === false)
+          if(cond === false || flag === 1)
           {
             flag = 1
+            break;
           }
+        }
+        if(flag === 1)
+        {
+          break;
         }
       }
     }

@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import Pieces from '../../components/Pieces'
 import './Board.css'
-import ChessMove, { KingCheck } from './ChessMove'
+import ChessMove from './ChessMove'
+import KingCheck from './KingCheck'
 import Checkmate from './Checkmate'
 
 var matrix_row = ['8', '7', '6', '5', '4', '3', '2', '1']
