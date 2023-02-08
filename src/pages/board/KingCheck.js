@@ -3,7 +3,7 @@ import Pieces from '../../components/Pieces'
 
 function KingCheck()
 {  
-    let con = ["",[],false  ] // current King, Chess Piece who gives the check, check
+    let con = ["",[],false] // current King, Chess Piece who gives the check, check
     var king = []
     var piece = Object.entries(Pieces)
     piece.map((key) =>

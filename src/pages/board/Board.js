@@ -4,6 +4,7 @@ import './Board.css'
 import ChessMove from './ChessMove'
 import KingCheck from './KingCheck'
 import Checkmate from './Checkmate'
+import PawnPromotion from './PawnPromotion'
 
 var matrix_row = ['8', '7', '6', '5', '4', '3', '2', '1']
 var matrix_col = ['a','b','c','d','e','f','g','h']
@@ -15,9 +16,9 @@ function Board() {
     const [check, setCheck] = useState(false)
     const [render, setRender] = useState(1)
     const [click, setClick] = useState(0)
+    const [pawnPromoted, setPawnPromoted] = useState([])
     
     const [player1, setPlayer1] = useState(true)
-
     function Images(x,y)
     {
         let piece = Object.entries(Pieces)
@@ -120,6 +121,11 @@ function Board() {
                     }
                     else // check got eliminated
                     {
+                        // console.log(activePiece)
+                        if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
+                        {
+                            setPawnPromoted([activePiece, true])
+                        }
                         setClick(0)
                         setCheck(false)
                         setRender(render+1)
@@ -138,6 +144,11 @@ function Board() {
                     {
                             if (Checkmate(current_king) === 1)
                                 console.log("Stalemate")
+                    }
+                    // console.log(activePiece)
+                    if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
+                    {
+                        setPawnPromoted([activePiece, true])
                     }
                     setClick(0)
                     setPlayer1(!player1)
@@ -199,13 +210,25 @@ function Board() {
 
     return (
         <>
+        {!pawnPromoted[1] &&
         <div className='matrix-design'>
             {matrix}
         </div>
+        }
+        {!pawnPromoted[1] &&   
         <div className='players'>
             {player1 && <div>Player 1(white) move</div>} 
             {!player1 && <div>Player 2(black) move</div>} 
         </div>
+        }
+        {pawnPromoted[1] &&
+        <div className='text-white'>
+            {/* ajdjada */}
+            <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"queen")}}>Queen</button>
+            <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"bishop")}}>Bishop</button>
+            <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"knight")}}>Knight</button>
+            <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"rook")}}>Rook</button>
+        </div>}
         </>
     )
 }

@@ -110,7 +110,7 @@ var Pieces =  {
             "position_y": 'f',
             "img": black_bishop
         },
-        "black_queen":
+        "black_queen1":
         {
             "color": "black",
             "position_x": "8",
@@ -222,7 +222,7 @@ var Pieces =  {
             "position_y": 'f',
             "img": white_bishop
         },
-        "white_queen":
+        "white_queen1":
         {
             "color": "white",
             "position_x": "1",
