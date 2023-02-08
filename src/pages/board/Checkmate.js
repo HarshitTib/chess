@@ -84,7 +84,7 @@ function Checkmate(current_king) {
   })
   if(flag === 0)
   {
-    console.log("It is a checkmate")
+    alert("It is a checkmate")
   }
   return (
     <div>
