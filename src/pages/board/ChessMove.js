@@ -161,8 +161,9 @@ export function KnightMove(int_xd, int_xs, int_yd, int_ys)
     return con
 }
 
-export function KingMove(int_xd, int_xs, int_yd, int_ys)
+export function KingMove(int_xd, int_xs, int_yd, int_ys, check, activePiece)
 {
+    // console.log(int_xd, int_xs, int_yd, int_ys)
     let con = false
     let diff_x = Math.abs(int_xs - int_xd)
     let diff_y = Math.abs(int_ys - int_yd)
@@ -170,10 +171,33 @@ export function KingMove(int_xd, int_xs, int_yd, int_ys)
     {
         con = true
     }
+    else if(!check && activePiece && !Pieces[activePiece]["moved"] && diff_y === 2 && diff_x === 0 && ((int_xs === 1 || int_xs === 8) && int_ys === 101) && !CheckPiece(int_xd,int_yd) && !CheckPiece(int_xd, int_yd-1)) // Casling condition(hard coded)
+    {
+        if(int_yd > int_ys)
+        {
+            let temp = CheckPiece(int_xd, int_yd+1)
+            if(temp && temp[0].includes("rook") && !temp[1]["moved"])
+            {
+                temp[1]["position_x"] = String(int_xd)
+                temp[1]["position_y"] = String.fromCharCode(int_yd-1)
+                con = true
+            }
+        }
+        else if(int_yd < int_ys && !CheckPiece(int_xd, int_yd+1))
+        {
+            let temp = CheckPiece(int_xd, int_yd-2)
+            if(temp && temp[0].includes("rook") && !temp[1]["moved"])
+            {
+                temp[1]["position_x"] = String(int_xd)
+                temp[1]["position_y"] = String.fromCharCode(int_yd+1)
+                con = true
+            }
+        }
+    }
     return con
 }
 
-function ChessMove(activePiece,x,y) {
+function ChessMove(activePiece,x,y,check) {
 
     var cond = false
     var int_xd1 = parseInt(x) // Destination x
@@ -191,6 +215,10 @@ function ChessMove(activePiece,x,y) {
     else if(activePiece.includes("rook"))
     {
         cond = RookMove(int_xd1, int_xs1, int_yd1, int_ys1)
+        if(cond === true)
+        {
+            Pieces[activePiece]["moved"] = true
+        }
     }
     else if (activePiece.includes("queen"))
     {
@@ -202,7 +230,11 @@ function ChessMove(activePiece,x,y) {
     }
     else if(activePiece.includes("king"))
     {
-        cond = (KingMove(int_xd1, int_xs1, int_yd1, int_ys1))
+        cond = (KingMove(int_xd1, int_xs1, int_yd1, int_ys1, check, activePiece))
+        if(cond === true)
+        {
+            Pieces[activePiece]["moved"] = true
+        }
     }
     return (
         cond

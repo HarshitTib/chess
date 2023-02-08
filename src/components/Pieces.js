@@ -73,14 +73,16 @@ var Pieces =  {
             "color": "black",
             "position_x": "8",
             "position_y": 'a',
-            "img": black_rook
+            "img": black_rook,
+            "moved" : false
         },
         "black_rook2":
         {
             "color": "black",
             "position_x": "8",
             "position_y": 'h',
-            "img": black_rook
+            "img": black_rook,
+            "moved" : false
         },
         "black_knight1":
         {
@@ -122,7 +124,8 @@ var Pieces =  {
             "color": "black",
             "position_x": "8",
             "position_y": 'e',
-            "img": black_king
+            "img": black_king,
+            "moved" : false
         },
         "white_pawn1":
         {
@@ -185,14 +188,16 @@ var Pieces =  {
             "color": "white",
             "position_x": "1",
             "position_y": 'a',
-            "img": white_rook
+            "img": white_rook,
+            "moved" : false
         },
         "white_rook2":
         {
             "color": "white",
             "position_x": "1",
             "position_y": 'h',
-            "img": white_rook
+            "img": white_rook,
+            "moved" : false
         },
         "white_knight1":
         {
@@ -234,7 +239,8 @@ var Pieces =  {
             "color": "white",
             "position_x": "1",
             "position_y": 'e',
-            "img": white_king
+            "img": white_king,
+            "moved" : false
         }
     }
 

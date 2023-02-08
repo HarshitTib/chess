@@ -54,7 +54,7 @@ function Board() {
         {
             setClick(0)
         }
-        else if(ChessMove(activePiece,x,y)) // If it is a valid move
+        else if(ChessMove(activePiece,x,y,check)) // If it is a valid move
         {
             // console.log(currentPiece, activePiece)
             let x1,y1,x2,y2
@@ -121,7 +121,6 @@ function Board() {
                     }
                     else // check got eliminated
                     {
-                        // console.log(activePiece)
                         if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
                         {
                             setPawnPromoted([activePiece, true])
@@ -142,8 +141,8 @@ function Board() {
                     }
                     else 
                     {
-                            if (Checkmate(current_king) === 1)
-                                console.log("Stalemate")
+                        if (Checkmate(current_king) === 1)
+                            console.log("Stalemate")
                     }
                     // console.log(activePiece)
                     if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
