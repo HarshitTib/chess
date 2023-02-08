@@ -75,7 +75,9 @@ function Board() {
                 Pieces[currentPiece]["position_x"] = "-1"
                 Pieces[currentPiece]["position_y"] = "-1"
             }
-            let [current_king, check_giver, king_is_checked] = KingCheck()
+            let temp = KingCheck()
+            let current_king = temp[0]
+            let king_is_checked = temp[2]
             let king_color = current_king ? Pieces[current_king]["color"] : ""
             if(king_is_checked && Pieces[activePiece]["color"] === king_color) // When you deliberately want to apply check to your king
             {
@@ -125,7 +127,7 @@ function Board() {
                 if(king_is_checked) // And the next move make the king to check
                 {
                     setCheck(true)
-                    Checkmate(current_king, check_giver)
+                    Checkmate(current_king)
                     console.log("King is checked")
                 }
                 setClick(0)
@@ -153,6 +155,9 @@ function Board() {
             {
                 for(let j=0; j<n; j++)
                 {
+                    let temp = check ?  KingCheck() : ""
+                    let current_king = temp[0]
+                    let check_giver = temp[1]
                     let x = matrix_row[i]
                     let y = matrix_col[j]
                     var image = Images(x,y)
@@ -162,9 +167,8 @@ function Board() {
                         matrix[i][j] = <div className='box-design color-white' tabIndex={[i,j]} key = {[i,j]} chess-piece={image} 
                         onClick={(event) => Toggle(event.target,x,y)}
                         style = {{
-                            backgroundColor: check ? ((KingCheck())[0] === image) ? "rgba(193, 0, 0, 0.724)" : "" : ""
+                            backgroundColor: (current_king === image || (check_giver && check_giver.includes(image))) ? "rgba(193, 0, 0, 0.724)" : "" 
                         }}>
-                        
                         <img chess-piece={image} src={image_img} alt={image}/></div>
                     }   
                     else
@@ -172,7 +176,7 @@ function Board() {
                         matrix[i][j] = <div className='box-design color-blue' tabIndex={[i,j]} key = {[i,j]} chess-piece={image} 
                         onClick={(event) => Toggle(event.target,x,y)}
                         style = {{
-                            backgroundColor: check ? ((KingCheck())[0] === image) ? "rgba(193, 0, 0, 0.724)" : "" : ""
+                            backgroundColor: (current_king === image || (check_giver && check_giver.includes(image))) ? "rgba(193, 0, 0, 0.724)" : "" 
                         }}>
                         <img chess-piece={image} src={image_img} alt={image}/></div>
                     }

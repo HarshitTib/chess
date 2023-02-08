@@ -29,7 +29,7 @@ export function PawnMove(int_xd, int_xs, int_yd, int_ys, activePiece)
         {
             con = true
         }
-        else if(diff_x === 1 && Math.abs(diff_y) === 1 && (CheckPiece(int_xd, int_yd) && CheckPiece(int_xd, int_yd))[0].includes("black"))
+        else if(diff_x === 1 && Math.abs(diff_y) === 1 && (CheckPiece(int_xd, int_yd) && (CheckPiece(int_xd, int_yd))[0].includes("black")))
         {
             con = true
         }
