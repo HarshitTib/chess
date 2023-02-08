@@ -3,7 +3,7 @@ import Pieces from '../../components/Pieces'
 
 function KingCheck()
 {  
-    let con = ["",[],false] // current King, Chess Piece who gives the check, check
+    let con = ["",[],false  ] // current King, Chess Piece who gives the check, check
     var king = []
     var piece = Object.entries(Pieces)
     piece.map((key) =>
@@ -50,6 +50,7 @@ function KingCheck()
                 {
                     if(BishopMove(int_xd,int_xs,int_yd,int_ys))
                     {
+                        // console.log(key[0], "gives check to ", currentKing[0])
                         con[0] = currentKing[0]
                         con[1].push(key[0])
                         con[2] = true
@@ -86,6 +87,7 @@ function KingCheck()
             return []
         })
     }
+    // console.log("KC returning ", con[2])
     return con
 }
 

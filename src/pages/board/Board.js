@@ -75,8 +75,11 @@ function Board() {
                 Pieces[currentPiece]["position_x"] = "-1"
                 Pieces[currentPiece]["position_y"] = "-1"
             }
-            let temp = KingCheck()
-            let current_king = temp[0]
+            let notCurrCol = current_color === "white" ? "black" : "white"
+            let temp = KingCheck(notCurrCol)
+            let temp_king = notCurrCol + "_king"
+            // console.log("Curr color king : ", temp_king)
+            let current_king = temp[0] ? temp[0] : temp_king
             let king_is_checked = temp[2]
             let king_color = current_king ? Pieces[current_king]["color"] : ""
             if(king_is_checked && Pieces[activePiece]["color"] === king_color) // When you deliberately want to apply check to your king
@@ -97,42 +100,49 @@ function Board() {
                 setClick(0)
                 setRender(render+1)
             }
-            else if(check) // Once it is checked, check for the next step
-            {
-                if(king_is_checked) // If the next move give rise to the check, revert back
+            else {
+                if(check) // Once it is checked, check for the next step
                 {
-                    if(!currentPiece)
+                    if(king_is_checked) // If the next move give rise to the check, revert back
                     {
-                        Pieces[activePiece]["position_x"] = x1
-                        Pieces[activePiece]["position_y"] = y1
+                        if(!currentPiece)
+                        {
+                            Pieces[activePiece]["position_x"] = x1
+                            Pieces[activePiece]["position_y"] = y1
+                        }
+                        else if((Pieces[activePiece]["color"] !== Pieces[currentPiece]["color"])) 
+                        {
+                            Pieces[activePiece]["position_x"] = x1
+                            Pieces[activePiece]["position_y"] = y1
+                            Pieces[currentPiece]["position_x"] = x2
+                            Pieces[currentPiece]["position_y"] = y2
+                        }
                     }
-                    else if((Pieces[activePiece]["color"] !== Pieces[currentPiece]["color"])) 
+                    else // check got eliminated
                     {
-                        Pieces[activePiece]["position_x"] = x1
-                        Pieces[activePiece]["position_y"] = y1
-                        Pieces[currentPiece]["position_x"] = x2
-                        Pieces[currentPiece]["position_y"] = y2
+                        setClick(0)
+                        setCheck(false)
+                        setRender(render+1)
+                        setPlayer1(!player1)
                     }
                 }
-                else // check got eliminated
+                else // When the king is not checked
                 {
+                    if(king_is_checked) // And the next move make the king to check
+                    {
+                        setCheck(true)
+                        if (Checkmate(current_king) === 1)
+                            console.log("Checkmate")
+                    }
+                    else 
+                    {
+                            if (Checkmate(current_king) === 1)
+                                console.log("Stalemate")
+                    }
                     setClick(0)
-                    setCheck(false)
-                    setRender(render+1)
                     setPlayer1(!player1)
+                    setRender(render+1)
                 }
-            }
-            else // When the king is not checked
-            {
-                if(king_is_checked) // And the next move make the king to check
-                {
-                    setCheck(true)
-                    Checkmate(current_king)
-                    console.log("King is checked")
-                }
-                setClick(0)
-                setPlayer1(!player1)
-                setRender(render+1)
             }
         }
         else

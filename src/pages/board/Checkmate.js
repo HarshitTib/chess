@@ -11,6 +11,7 @@ function MakeAMove(currentPiece, activePiece, x, y)
       y1 = Pieces[activePiece]["position_y"] // prev value of the activePiece in y
       Pieces[activePiece]["position_x"] = x
       Pieces[activePiece]["position_y"] = y
+      return true    
   }
   else if((Pieces[activePiece]["color"] !== Pieces[currentPiece]["color"])) //If it contains the alternate piece
   {
@@ -22,6 +23,9 @@ function MakeAMove(currentPiece, activePiece, x, y)
       Pieces[activePiece]["position_y"] = y
       Pieces[currentPiece]["position_x"] = "-1"
       Pieces[currentPiece]["position_y"] = "-1"
+      return true
+    }else {
+    return false
   }
 }
 
@@ -52,10 +56,13 @@ function ValidMove(key,destination_x,destination_y)
     if(ChessMove(key[0], String(destination_x), String.fromCharCode(destination_y)))
     {
       let currentPiece = CheckPiece(destination_x, destination_y)
-      MakeAMove(currentPiece[0], key[0], String(destination_x), String.fromCharCode(destination_y))
-      king_is_checked = KingCheck()[2]
-      RevertBack(currentPiece[0], key[0])
-      return king_is_checked
+      let temp = MakeAMove(currentPiece[0], key[0], String(destination_x), String.fromCharCode(destination_y))
+      if (temp) {
+        king_is_checked = KingCheck()[2]
+        RevertBack(currentPiece[0], key[0])
+        return king_is_checked
+      }
+      return true
     }
   }
   return king_is_checked
@@ -88,15 +95,11 @@ function Checkmate(current_king) {
     }
     return[]
   })
-  if(flag === 0)
-  {
-    alert("It is a checkmate")
-  }
-  return (
-    <div>
-      
-    </div>
-  )
+  // if(flag === 0)
+  // {
+  //   alert("It is a checkmate")
+  // }
+  return flag === 0 ? 1 : 0
 }
 
 export default Checkmate
