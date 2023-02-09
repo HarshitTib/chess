@@ -31,11 +31,14 @@ function PawnPromotion(pawnPromoted, setPawnPromoted, setCheck, image_tag) {
     setCheck(check_condition)
     if(Checkmate(current_king))
     {
-        console.log("It is a Checkmate")
+        Pieces[current_king]["checkmate"] = true
+        alert("It is a checkmate")
+        window.location.replace("/GameOver")
     }
     if(check_condition === false && Checkmate(current_king))
     {
-        console.log("It is a Stalemate")
+        alert("It is a stalemate")
+        window.location.replace("/GameOver")
     }
     setPawnPromoted(["",false])
 }

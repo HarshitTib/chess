@@ -125,7 +125,8 @@ var Pieces =  {
             "position_x": "8",
             "position_y": 'e',
             "img": black_king,
-            "moved" : false
+            "moved" : false,
+            "checkmate" : false
         },
         "white_pawn1":
         {
@@ -240,8 +241,9 @@ var Pieces =  {
             "position_x": "1",
             "position_y": 'e',
             "img": white_king,
-            "moved" : false
-        }
+            "moved" : false,
+            "checkmate" : false
+        },
     }
 
 export default Pieces

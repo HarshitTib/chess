@@ -1,16 +1,33 @@
 .color-blue
 {
-    background-color: rgb(37, 114, 190);
-    color: wheat;
+    /* background-color: #a33a2085; */
+    background-color: #1f1f1f;
+    color: black;
 }
 .color-white
 {
-    background-color: whitesmoke;
-    color: black;
+    background-color: #ffffffa7;
+    color: wheat;
+    
+}
+.color-grey
+{
+    background-color: #1f1f1f;
+    color: wheat;
+}
+.left-edge-design
+{
+    font-size: 1vw;
+    margin-left: 3vw;
+}
+.bottom-edge-design
+{
+    font-size: 1vw;
+    margin-bottom: 3vw;
 }
 .box-design
 {
-    border: 2px solid black;
+    border: 0.15vw solid black;
     border-radius: .5px;
     background-position: center;
     background-repeat: no-repeat;
@@ -18,44 +35,45 @@
     place-content: center;
     cursor : pointer
 }
-.box-design > div
+
+.box-design > img
 {
-    width: 3.5vw;
-    height: 3.5vw;
-    margin: auto;
-    padding-top: 25%;
-    
+    width: 90%;
+    -webkit-filter: drop-shadow(1px 1px 4px rgb(255, 255, 255)); /* to give glow */
 }
+
 
 .matrix-design {
     display: grid;
-    grid-template-columns: repeat(8, 5.5vw);
-    grid-template-rows: repeat(8, 5.5vw);
+    grid-template-columns: repeat(9, 5.5vw);
+    grid-template-rows: repeat(9, 5.5vw);
     justify-content: center;
     padding: 2vw;
     text-align: center;
-    /* background-color: rgb(27, 26, 26); */
-    width: 100vw;
-    height: 43vw;
+    width: 94vw;
+    height: 40vw;
 }
 .box-design:focus{
-    background-color: rgb(213, 13, 13)
+    background-color: #7AC74F;
 }
 
 .color-brown
 {
-background-color: brown;
+    color : rgba(193, 0, 0, 0.587)
 }
 
 .players
 {
-    background-color: aqua;
+    margin-top: 11vh;
+    background-color:  #1f1f1f;
     text-align: center;
-    margin-bottom: 2vw;
+    margin-bottom: .5vw;
     padding: 0.5vw;
     font-size: large;
-    margin-left: 30%;
-    margin-right: 25%;
     font-weight: bold;
-    color: rgb(0, 10, 0);
+    color: rgba(255, 255, 255, 0.543);
+}
+.temp
+{
+    color : rgba(193, 0, 0, 0.724)
 }

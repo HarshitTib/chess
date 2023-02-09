@@ -1,4 +1,3 @@
-import React from 'react'
 import Pieces from '../../components/Pieces'
 import ChessMove, { CheckPiece } from './ChessMove'
 import KingCheck from './KingCheck'

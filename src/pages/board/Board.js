@@ -13,6 +13,7 @@ var activePiece
 
 function Board() {
 
+
     const [check, setCheck] = useState(false)
     const [render, setRender] = useState(1)
     const [click, setClick] = useState(0)
@@ -137,12 +138,19 @@ function Board() {
                     {
                         setCheck(true)
                         if (Checkmate(current_king) === 1)
-                            console.log("Checkmate")
+                        {
+                            alert("It is a checkmate")
+                            Pieces[current_king]["checkmate"] = true
+                            window.location.replace("/GameOver")
+                        }
                     }
                     else 
                     {
                         if (Checkmate(current_king) === 1)
-                            console.log("Stalemate")
+                        {
+                            alert("It is a stalemate")
+                            window.location.replace("/GameOver")
+                        }
                     }
                     // console.log(activePiece)
                     if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
@@ -163,11 +171,11 @@ function Board() {
 
     function InsertIntoMatrix()
     {
-        matrix = new Array(8)
-        let n = 8
+        matrix = new Array(9)
+        let n = 9
         for(let i=0; i<matrix.length; i++)
         {
-            matrix[i] = new Array(8)
+            matrix[i] = new Array(9)
         }
         if(render)
         {
@@ -175,35 +183,51 @@ function Board() {
             {
                 for(let j=0; j<n; j++)
                 {
-                    let temp = check ?  KingCheck() : ""
-                    let current_king = temp[0]
-                    let check_giver = temp[1]
-                    let x = matrix_row[i]
-                    let y = matrix_col[j]
-                    var image = Images(x,y)
-                    var image_img = image ? Pieces[image]["img"] : null
-                    if((i+j)%2 === 0)
+                    if(i === 8 || j === 0)
                     {
-                        matrix[i][j] = <div className='box-design color-white' tabIndex={[i,j]} key = {[i,j]} chess-piece={image} 
-                        onClick={(event) => Toggle(event.target,x,y)}
-                        style = {{
-                            backgroundColor: (current_king === image || (check_giver && check_giver.includes(image))) ? "rgba(193, 0, 0, 0.724)" : "" 
-                        }}>
-                        <img chess-piece={image} src={image_img} alt={image}/></div>
-                    }   
+                        if(i===8)
+                        {
+                            matrix[i][j] =<div className='box-design color-grey bottom-edge-design' key = {[i,j]}>{matrix_col[j-1]}</div>
+                            matrix[i][0] = <div className='box-design color-grey left-edge-design bottom-edge-design' key = {[i,0]}>0</div>
+                        }
+                        else
+                        { 
+                            matrix[i][j] =<div className='box-design color-grey left-edge-design' key = {[i,j]}>{matrix_row[i]}</div>
+                        }
+                    }
                     else
                     {
-                        matrix[i][j] = <div className='box-design color-blue' tabIndex={[i,j]} key = {[i,j]} chess-piece={image} 
-                        onClick={(event) => Toggle(event.target,x,y)}
-                        style = {{
-                            backgroundColor: (current_king === image || (check_giver && check_giver.includes(image))) ? "rgba(193, 0, 0, 0.724)" : "" 
-                        }}>
-                        <img chess-piece={image} src={image_img} alt={image}/></div>
+                        let temp = check ?  KingCheck() : ""
+                        let current_king = temp[0]
+                        let check_giver = temp[1]
+                        let x = matrix_row[i]
+                        let y = matrix_col[j-1]
+                        var image = Images(x,y)
+                        var image_img = image ? Pieces[image]["img"] : null
+                        if((i+j)%2 === 1)
+                        {
+                            matrix[i][j] = <div className='box-design color-white' tabIndex={[i,j]} key = {[i,j]} chess-piece={image} 
+                            onClick={(event) => Toggle(event.target,x,y)}
+                            style = {{
+                                backgroundColor: (current_king === image || (check_giver && check_giver.includes(image))) ? " rgb(212, 8, 8)" : "" 
+                            }}>
+                            <img chess-piece={image} src={image_img} alt={image}/></div>
+                        }   
+                        else
+                        {
+                            matrix[i][j] = <div className='box-design color-blue' tabIndex={[i,j]} key = {[i,j]} chess-piece={image} 
+                            onClick={(event) => Toggle(event.target,x,y)}
+                            style = {{
+                                backgroundColor: (current_king === image || (check_giver && check_giver.includes(image))) ? " rgb(212, 8, 8)" : "" 
+                            }}>
+                            <img chess-piece={image} src={image_img} alt={image}/></div>
+                        }
                     }
                 }
             }
         }
     }
+
 
     InsertIntoMatrix()
 
@@ -221,7 +245,7 @@ function Board() {
         </div>
         }
         {pawnPromoted[1] &&
-        <div className='text-white'>
+        <div className='text-white pawn-promoted'>
             {/* ajdjada */}
             <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"queen")}}>Queen</button>
             <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"bishop")}}>Bishop</button>
