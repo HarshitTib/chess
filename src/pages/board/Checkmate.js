@@ -6,24 +6,26 @@ function MakeAMove(currentPiece, activePiece, x, y)
 {
   if(!currentPiece) // If it is an empty block
   {
-      x1 = Pieces[activePiece]["position_x"] // prev value of the activePiece in x
-      y1 = Pieces[activePiece]["position_y"] // prev value of the activePiece in y
-      Pieces[activePiece]["position_x"] = x
-      Pieces[activePiece]["position_y"] = y
-      return true    
+    x1 = Pieces[activePiece]["position_x"] // prev value of the activePiece in x
+    y1 = Pieces[activePiece]["position_y"] // prev value of the activePiece in y
+    Pieces[activePiece]["position_x"] = x
+    Pieces[activePiece]["position_y"] = y
+    return true    
   }
   else if((Pieces[activePiece]["color"] !== Pieces[currentPiece]["color"])) //If it contains the alternate piece
   {
-      x1 = Pieces[activePiece]["position_x"] // prev value of the activePiece in x
-      y1 = Pieces[activePiece]["position_y"] // prev value of the activePiece in y
-      x2 = Pieces[currentPiece]["position_x"] // prev value of the currentPiece in x
-      y2 = Pieces[currentPiece]["position_y"] // prev value of the currentPiece in y
-      Pieces[activePiece]["position_x"] = x
-      Pieces[activePiece]["position_y"] = y
-      Pieces[currentPiece]["position_x"] = "-1"
-      Pieces[currentPiece]["position_y"] = "-1"
-      return true
-    }else {
+    x1 = Pieces[activePiece]["position_x"] // prev value of the activePiece in x
+    y1 = Pieces[activePiece]["position_y"] // prev value of the activePiece in y
+    x2 = Pieces[currentPiece]["position_x"] // prev value of the currentPiece in x
+    y2 = Pieces[currentPiece]["position_y"] // prev value of the currentPiece in y
+    Pieces[activePiece]["position_x"] = x
+    Pieces[activePiece]["position_y"] = y
+    Pieces[currentPiece]["position_x"] = "-1"
+    Pieces[currentPiece]["position_y"] = "-1"
+    return true
+  }
+  else 
+  {
     return false
   }
 }

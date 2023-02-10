@@ -22,3 +22,23 @@ body
   color: wheat;
   text-decoration: none;
 }
+
+
+.container
+{
+  color: wheat;
+  margin: 7vh auto auto auto;
+  width: 50%;
+  border: 3px solid #1f1f1f;
+  padding: 10px;
+}
+
+
+.text-center
+{
+  margin: auto;
+  width: 50%;
+  /* display: flex; */
+  /* align-items: center;
+  justify-content: center; */
+}
