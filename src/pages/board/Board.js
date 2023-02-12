@@ -10,9 +10,68 @@ var matrix_row = ['8', '7', '6', '5', '4', '3', '2', '1']
 var matrix_col = ['a','b','c','d','e','f','g','h']
 var matrix
 var activePiece
+let x1,x2,y1,y2 // to store the old value of x and y while making a move
+
+function MakeAMove(currentPiece, activePiece, x, y)
+{
+  if(!currentPiece) // If it is an empty block
+  {
+    x1 = Pieces[activePiece]["position_x"] // prev value of the activePiece in x
+    y1 = Pieces[activePiece]["position_y"] // prev value of the activePiece in y
+    Pieces[activePiece]["position_x"] = x
+    Pieces[activePiece]["position_y"] = y
+    return true    
+  }
+  else if((Pieces[activePiece]["color"] !== Pieces[currentPiece]["color"])) //If it contains the alternate piece
+  {
+    x1 = Pieces[activePiece]["position_x"] // prev value of the activePiece in x
+    y1 = Pieces[activePiece]["position_y"] // prev value of the activePiece in y
+    x2 = Pieces[currentPiece]["position_x"] // prev value of the currentPiece in x
+    y2 = Pieces[currentPiece]["position_y"] // prev value of the currentPiece in y
+    Pieces[activePiece]["position_x"] = x
+    Pieces[activePiece]["position_y"] = y
+    Pieces[currentPiece]["position_x"] = "-1"
+    Pieces[currentPiece]["position_y"] = "-1"
+    return true
+  }
+  else 
+  {
+    return false
+  }
+}
+
+function RevertBack(currentPiece, activePiece)
+{
+  if(!currentPiece)
+  {
+    Pieces[activePiece]["position_x"] = x1
+    Pieces[activePiece]["position_y"] = y1
+  }
+  else if((Pieces[activePiece]["color"] !== Pieces[currentPiece]["color"])) 
+  {
+      Pieces[activePiece]["position_x"] = x1
+      Pieces[activePiece]["position_y"] = y1
+      Pieces[currentPiece]["position_x"] = x2
+      Pieces[currentPiece]["position_y"] = y2
+  }
+}
+
+function Images(x,y) // return an image at a particular location
+{
+    let piece = Object.entries(Pieces)
+    let temp = null
+    piece.map(key =>
+    {
+        if(key[1]["position_x"] === x && key[1]["position_y"] === y)
+        {
+            temp = key[0]  // returning the images at a particular position
+        }     
+        return []
+    })
+    return temp
+}
 
 function Board() {
-
 
     const [check, setCheck] = useState(false)
     const [render, setRender] = useState(1)
@@ -20,84 +79,40 @@ function Board() {
     const [pawnPromoted, setPawnPromoted] = useState([])
     
     const [player1, setPlayer1] = useState(true)
-    function Images(x,y)
-    {
-        let piece = Object.entries(Pieces)
-        let temp = null
-        piece.map(key =>
-        {
-            if(key[1]["position_x"] === x && key[1]["position_y"] === y)
-            {
-                temp = key[0]  // returning the images at a particular position
-            }     
-            return []
-        })
-        return temp
-    }
+    
 
-    function Toggle (box, x, y) {
+    function Toggle (box, dest_x, dest_y) {
         let currentPiece = box.getAttribute("chess-piece")
+        let current_color = player1 ? "white" : "black"
         if((!currentPiece && click === 0))
         {
             return
         }
-        let current_color = player1 ? "white" : "black"
-        if((currentPiece) && (click === 0))
+        if((currentPiece))
         {
-            if((current_color === Pieces[currentPiece]["color"]))
+            if((click === 0) && (current_color === Pieces[currentPiece]["color"]))
             {
                 activePiece = currentPiece
-                // console.log(activePiece)
                 setClick(1)
+                return
+            }
+            else if((click === 1) && (Pieces[activePiece]["color"] === Pieces[currentPiece]["color"]))
+            {
+                setClick(0)
             }
         }
-        else if(currentPiece && (Pieces[activePiece]["color"] === Pieces[currentPiece]["color"]))
+        if((click === 1) && ChessMove(activePiece, dest_x, dest_y, check)) // If it is a valid move
         {
-            setClick(0)
-        }
-        else if(ChessMove(activePiece,x,y,check)) // If it is a valid move
-        {
-            // console.log(currentPiece, activePiece)
-            let x1,y1,x2,y2
-            if(!currentPiece) // If it is an empty block
-            {
-                x1 = Pieces[activePiece]["position_x"] // prev value of the activePiece in x
-                y1 = Pieces[activePiece]["position_y"] // prev value of the activePiece in y
-                Pieces[activePiece]["position_x"] = x
-                Pieces[activePiece]["position_y"] = y
-            }
-            else if((Pieces[activePiece]["color"] !== Pieces[currentPiece]["color"])) //If it contains the alternate piece
-            {
-                x1 = Pieces[activePiece]["position_x"] // prev value of the activePiece in x
-                y1 = Pieces[activePiece]["position_y"] // prev value of the activePiece in y
-                x2 = Pieces[currentPiece]["position_x"] // prev value of the currentPiece in x
-                y2 = Pieces[currentPiece]["position_y"] // prev value of the currentPiece in y
-                Pieces[activePiece]["position_x"] = x
-                Pieces[activePiece]["position_y"] = y
-                Pieces[currentPiece]["position_x"] = "-1"
-                Pieces[currentPiece]["position_y"] = "-1"
-            }
+            MakeAMove(currentPiece, activePiece, dest_x, dest_y)
             let notCurrCol = current_color === "white" ? "black" : "white"
-            let temp = KingCheck(notCurrCol)
             let temp_king = notCurrCol + "_king"
-            // console.log("Curr color king : ", temp_king)
-            let current_king = temp[0] ? temp[0] : temp_king
+            let temp = KingCheck(temp_king) 
+            let current_king = temp[0] ? temp[0] : temp_king 
             let king_is_checked = temp[2]
-            let king_color = current_king ? Pieces[current_king]["color"] : ""
+            let king_color = temp[0] ? Pieces[current_king]["color"] : ""
             if(king_is_checked && Pieces[activePiece]["color"] === king_color) // When you deliberately want to apply check to your king
             {
-                if(!currentPiece)
-                {
-                    Pieces[activePiece]["position_x"] = x1
-                    Pieces[activePiece]["position_y"] = y1
-                }
-                else if((Pieces[activePiece]["color"] !== Pieces[currentPiece]["color"])) 
-                {
-                    Pieces[activePiece]["position_x"] = x1
-                    Pieces[activePiece]["position_y"] = y1
-                    Pieces[currentPiece]["position_x"] = x2
-                    Pieces[currentPiece]["position_y"] = y2
-                }
+                RevertBack(currentPiece, activePiece)
                 alert("Invalid move")
                 setClick(0)
                 setRender(render+1)
@@ -107,18 +122,7 @@ function Board() {
                 {
                     if(king_is_checked) // If the next move give rise to the check, revert back
                     {
-                        if(!currentPiece)
-                        {
-                            Pieces[activePiece]["position_x"] = x1
-                            Pieces[activePiece]["position_y"] = y1
-                        }
-                        else if((Pieces[activePiece]["color"] !== Pieces[currentPiece]["color"])) 
-                        {
-                            Pieces[activePiece]["position_x"] = x1
-                            Pieces[activePiece]["position_y"] = y1
-                            Pieces[currentPiece]["position_x"] = x2
-                            Pieces[currentPiece]["position_y"] = y2
-                        }
+                        RevertBack(currentPiece, activePiece)
                     }
                     else // check got eliminated
                     {
