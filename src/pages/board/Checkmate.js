@@ -47,17 +47,17 @@ function RevertBack(currentPiece, activePiece)
 }
 
 
-function ValidMove(key,destination_x,destination_y)
+function ValidMove(key, destination_x, destination_y)
 {
   let king_is_checked = true
   let source_x = parseInt(key[1]["position_x"])
-  let source_y = key[1]["position_y"].charCodeAt(0)
+  let source_y = parseInt(key[1]["position_y"])
   if(source_x !== -1 && source_y !== -1)
   {
-    if(ChessMove(key[0], String(destination_x), String.fromCharCode(destination_y)))
+    if(ChessMove(key[0], String(destination_x), String(destination_y)))
     {
       let currentPiece = CheckPiece(destination_x, destination_y)
-      let temp = MakeAMove(currentPiece[0], key[0], String(destination_x), String.fromCharCode(destination_y))
+      let temp = MakeAMove(currentPiece[0], key[0], String(destination_x), String(destination_y))
       if (temp) {
         king_is_checked = KingCheck()[2]
         RevertBack(currentPiece[0], key[0])
@@ -76,12 +76,11 @@ function Checkmate(current_king) {
   chess_pieces.map(key => {
     if(key[1]["color"] === Pieces[current_king]["color"])
     { 
-      // console.log(key[0])
       for(let i=1; i<=8; i++)
       {
-        for(let j=97; j<=104; j++)
+        for(let j=1; j<=8; j++)
         {
-          cond = ValidMove(key,i,j)
+          cond = ValidMove(key, i, j)
           if(cond === false || flag === 1)
           {
             flag = 1
@@ -96,10 +95,6 @@ function Checkmate(current_king) {
     }
     return[]
   })
-  // if(flag === 0)
-  // {
-  //   alert("It is a checkmate")
-  // }
   return flag === 0 ? 1 : 0
 }
 

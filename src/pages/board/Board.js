@@ -7,7 +7,8 @@ import Checkmate from './Checkmate'
 import PawnPromotion from './PawnPromotion'
 
 var matrix_row = ['8', '7', '6', '5', '4', '3', '2', '1']
-var matrix_col = ['a','b','c','d','e','f','g','h']
+var matrix_col = ['1', '2', '3', '4', '5', '6', '7', '8']
+var matrix_col1 = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 var matrix
 var activePiece
 let x1,x2,y1,y2 // to store the old value of x and y while making a move
@@ -77,7 +78,6 @@ function Board() {
     const [render, setRender] = useState(1)
     const [click, setClick] = useState(0)
     const [pawnPromoted, setPawnPromoted] = useState([])
-    
     const [player1, setPlayer1] = useState(true)
     
 
@@ -191,7 +191,7 @@ function Board() {
                     {
                         if(i===8)
                         {
-                            matrix[i][j] =<div className='box-design color-grey bottom-edge-design' key = {[i,j]}>{matrix_col[j-1]}</div>
+                            matrix[i][j] =<div className='box-design color-grey bottom-edge-design' key = {[i,j]}>{matrix_col1[j-1]}</div>
                             matrix[i][0] = <div className='box-design color-grey left-edge-design bottom-edge-design' key = {[i,0]}>0</div>
                         }
                         else
@@ -211,7 +211,7 @@ function Board() {
                         if((i+j)%2 === 1)
                         {
                             matrix[i][j] = <div className='box-design color-white' tabIndex={[i,j]} key = {[i,j]} chess-piece={image} 
-                            onClick={(event) => Toggle(event.target,x,y)}
+                            onClick={(event) => Toggle(event.target, x, y)}
                             style = {{
                                 backgroundColor: (current_king === image || (check_giver && check_giver.includes(image))) ? " rgb(212, 8, 8)" : "" 
                             }}>
@@ -220,7 +220,7 @@ function Board() {
                         else
                         {
                             matrix[i][j] = <div className='box-design color-blue' tabIndex={[i,j]} key = {[i,j]} chess-piece={image} 
-                            onClick={(event) => Toggle(event.target,x,y)}
+                            onClick={(event) => Toggle(event.target, x, y)}
                             style = {{
                                 backgroundColor: (current_king === image || (check_giver && check_giver.includes(image))) ? " rgb(212, 8, 8)" : "" 
                             }}>

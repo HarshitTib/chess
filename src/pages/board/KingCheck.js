@@ -14,7 +14,6 @@ function KingCheck()
         }
         return []
     })
-    // console.log(king.length)
     for(let i=0; i<king.length; i++)
     {
         let currentKing = king[i]
@@ -25,9 +24,9 @@ function KingCheck()
             if(king_color !== piece_color)
             {
                 let int_xd = parseInt(currentKing[1]["position_x"]) // Destination x
-                let int_yd = currentKing[1]["position_y"].charCodeAt(0) // Destination y
+                let int_yd = parseInt(currentKing[1]["position_y"]) // Destination y
                 let int_xs = parseInt(key[1]["position_x"]) // Source x
-                let int_ys = key[1]["position_y"].charCodeAt(0)
+                let int_ys = parseInt(key[1]["position_y"])
                 if(key[0].includes("pawn"))
                 {
                     if(PawnMove(int_xd,int_xs,int_yd,int_ys,key[0],currentKing[0]))
@@ -50,7 +49,6 @@ function KingCheck()
                 {
                     if(BishopMove(int_xd,int_xs,int_yd,int_ys))
                     {
-                        // console.log(key[0], "gives check to ", currentKing[0])
                         con[0] = currentKing[0]
                         con[1].push(key[0])
                         con[2] = true
@@ -87,7 +85,6 @@ function KingCheck()
             return []
         })
     }
-    // console.log("KC returning ", con[2])
     return con
 }
 

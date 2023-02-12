@@ -5,7 +5,7 @@ export function CheckPiece(x, y) // If any chess piece is present at a particula
     let temp = ""
     let pieces = Object.entries(Pieces)
     pieces.map((key) => {
-        if(key[1]["position_x"] === String(x) && key[1]["position_y"] === String.fromCharCode(y))
+        if(key[1]["position_x"] === String(x) && key[1]["position_y"] === String(y))
         {
             temp = key
         }
@@ -63,7 +63,7 @@ export function RookMove(int_xd, int_xs, int_yd, int_ys)
             let piece = Object.entries(Pieces)
             piece.map(key =>
             {
-                if(key[1]["position_x"] === String(int_xs) && key[1]["position_y"] === String.fromCharCode(i))
+                if(key[1]["position_x"] === String(int_xs) && key[1]["position_y"] === String(i))
                 {
                     con[0] = false
                 }     
@@ -79,7 +79,7 @@ export function RookMove(int_xd, int_xs, int_yd, int_ys)
             let piece = Object.entries(Pieces)
             piece.map(key =>
             {
-                if(key[1]["position_x"] === String(i) && key[1]["position_y"] === String.fromCharCode(int_ys))
+                if(key[1]["position_x"] === String(i) && key[1]["position_y"] === String(int_ys))
                 {
                     con[0] = false
                 }    
@@ -108,28 +108,28 @@ export function BishopMove(int_xd, int_xs, int_yd, int_ys)
             {
                 if((int_xd > int_xs) && (int_yd > int_ys))
                 {
-                    if(key[1]["position_x"] === String(int_xs+i) && key[1]["position_y"] === String.fromCharCode(int_ys+i))
+                    if(key[1]["position_x"] === String(int_xs+i) && key[1]["position_y"] === String(int_ys+i))
                     {
                         con[0] = false
                     }     
                 }
                 else if((int_xd < int_xs) && (int_yd > int_ys))
                 {
-                    if(key[1]["position_x"] === String(int_xs-i) && key[1]["position_y"] === String.fromCharCode(int_ys+i))
+                    if(key[1]["position_x"] === String(int_xs-i) && key[1]["position_y"] === String(int_ys+i))
                     {
                         con[0] = false
                     }     
                 }
                 else if((int_xd > int_xs) && (int_yd < int_ys))
                 {
-                    if(key[1]["position_x"] === String(int_xs+i) && key[1]["position_y"] === String.fromCharCode(int_ys-i))
+                    if(key[1]["position_x"] === String(int_xs+i) && key[1]["position_y"] === String(int_ys-i))
                     {
                         con[0] = false
                     }     
                 }
                 else if((int_xd < int_xs) && (int_yd < int_ys))
                 {
-                    if(key[1]["position_x"] === String(int_xs-i) && key[1]["position_y"] === String.fromCharCode(int_ys-i))
+                    if(key[1]["position_x"] === String(int_xs-i) && key[1]["position_y"] === String(int_ys-i))
                     {
                         con[0] = false
                     }     
@@ -163,7 +163,6 @@ export function KnightMove(int_xd, int_xs, int_yd, int_ys)
 
 export function KingMove(int_xd, int_xs, int_yd, int_ys, check, activePiece)
 {
-    // console.log(int_xd, int_xs, int_yd, int_ys)
     let con = false
     let diff_x = Math.abs(int_xs - int_xd)
     let diff_y = Math.abs(int_ys - int_yd)
@@ -171,7 +170,7 @@ export function KingMove(int_xd, int_xs, int_yd, int_ys, check, activePiece)
     {
         con = true
     }
-    else if(!check && activePiece && !Pieces[activePiece]["moved"] && diff_y === 2 && diff_x === 0 && ((int_xs === 1 || int_xs === 8) && int_ys === 101) && !CheckPiece(int_xd,int_yd) && !CheckPiece(int_xd, int_yd-1)) // Casling condition(hard coded)
+    else if(!check && activePiece && !Pieces[activePiece]["moved"] && diff_y === 2 && diff_x === 0 && ((int_xs === 1 || int_xs === 8) && int_ys === 5) && !CheckPiece(int_xd,int_yd) && !CheckPiece(int_xd, int_yd-1)) // Casling condition(hard coded)
     {
         if(int_yd > int_ys)
         {
@@ -179,7 +178,7 @@ export function KingMove(int_xd, int_xs, int_yd, int_ys, check, activePiece)
             if(temp && temp[0].includes("rook") && !temp[1]["moved"])
             {
                 temp[1]["position_x"] = String(int_xd)
-                temp[1]["position_y"] = String.fromCharCode(int_yd-1)
+                temp[1]["position_y"] = String(int_yd-1)
                 con = true
             }
         }
@@ -189,7 +188,7 @@ export function KingMove(int_xd, int_xs, int_yd, int_ys, check, activePiece)
             if(temp && temp[0].includes("rook") && !temp[1]["moved"])
             {
                 temp[1]["position_x"] = String(int_xd)
-                temp[1]["position_y"] = String.fromCharCode(int_yd+1)
+                temp[1]["position_y"] = String(int_yd+1)
                 con = true
             }
         }
@@ -197,13 +196,13 @@ export function KingMove(int_xd, int_xs, int_yd, int_ys, check, activePiece)
     return con
 }
 
-function ChessMove(activePiece,x,y,check) {
+function ChessMove(activePiece, x, y, check) {
 
     var cond = false
     var int_xd1 = parseInt(x) // Destination x
-    var int_yd1 = y.charCodeAt(0) // Destination y
+    var int_yd1 = parseInt(y) // Destination y
     var int_xs1 = parseInt(Pieces[activePiece]["position_x"]) // Source x
-    var int_ys1 = Pieces[activePiece]["position_y"].charCodeAt(0) // Source y    
+    var int_ys1 = parseInt(Pieces[activePiece]["position_y"]) // Source y    
     if(activePiece.includes("bishop"))
     {
         cond = BishopMove(int_xd1, int_xs1, int_yd1, int_ys1)
