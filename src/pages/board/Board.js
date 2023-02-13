@@ -13,7 +13,7 @@ var matrix
 var activePiece
 let x1,x2,y1,y2 // to store the old value of x and y while making a move
 
-function MakeAMove(currentPiece, activePiece, x, y)
+export function MakeAMove(currentPiece, activePiece, x, y)
 {
   if(!currentPiece) // If it is an empty block
   {
@@ -41,7 +41,7 @@ function MakeAMove(currentPiece, activePiece, x, y)
   }
 }
 
-function RevertBack(currentPiece, activePiece)
+export function RevertBack(currentPiece, activePiece)
 {
   if(!currentPiece)
   {
@@ -50,12 +50,13 @@ function RevertBack(currentPiece, activePiece)
   }
   else if((Pieces[activePiece]["color"] !== Pieces[currentPiece]["color"])) 
   {
-      Pieces[activePiece]["position_x"] = x1
-      Pieces[activePiece]["position_y"] = y1
-      Pieces[currentPiece]["position_x"] = x2
-      Pieces[currentPiece]["position_y"] = y2
+    Pieces[activePiece]["position_x"] = x1
+    Pieces[activePiece]["position_y"] = y1
+    Pieces[currentPiece]["position_x"] = x2
+    Pieces[currentPiece]["position_y"] = y2
   }
 }
+
 
 function Images(x,y) // return an image at a particular location
 {
@@ -72,107 +73,81 @@ function Images(x,y) // return an image at a particular location
     return temp
 }
 
-function Board() {
 
+function Board() {
+    
     const [check, setCheck] = useState(false)
     const [render, setRender] = useState(1)
     const [click, setClick] = useState(0)
     const [pawnPromoted, setPawnPromoted] = useState([])
     const [player1, setPlayer1] = useState(true)
-    
 
-    function Toggle (box, dest_x, dest_y) {
+    function Toggle (box, dest_x, dest_y) 
+    {
         let currentPiece = box.getAttribute("chess-piece")
         let current_color = player1 ? "white" : "black"
-        if((!currentPiece && click === 0))
+        let not_current_color = player1 ? "black" : "white"
+        if(click === 0)
         {
-            return
-        }
-        if((currentPiece))
-        {
-            if((click === 0) && (current_color === Pieces[currentPiece]["color"]))
+            if(currentPiece && Pieces[currentPiece]["color"] === current_color)
             {
-                activePiece = currentPiece
-                setClick(1)
-                return
-            }
-            else if((click === 1) && (Pieces[activePiece]["color"] === Pieces[currentPiece]["color"]))
-            {
-                setClick(0)
-            }
-        }
-        if((click === 1) && ChessMove(activePiece, dest_x, dest_y, check)) // If it is a valid move
-        {
-            MakeAMove(currentPiece, activePiece, dest_x, dest_y)
-            let notCurrCol = current_color === "white" ? "black" : "white"
-            let temp_king = notCurrCol + "_king"
-            let temp = KingCheck(temp_king) 
-            let current_king = temp[0] ? temp[0] : temp_king 
-            let king_is_checked = temp[2]
-            let king_color = temp[0] ? Pieces[current_king]["color"] : ""
-            if(king_is_checked && Pieces[activePiece]["color"] === king_color) // When you deliberately want to apply check to your king
-            {
-                RevertBack(currentPiece, activePiece)
-                alert("Invalid move")
-                setClick(0)
-                setRender(render+1)
-            }
-            else {
-                if(check) // Once it is checked, check for the next step
-                {
-                    if(king_is_checked) // If the next move give rise to the check, revert back
-                    {
-                        RevertBack(currentPiece, activePiece)
-                    }
-                    else // check got eliminated
-                    {
-                        if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
-                        {
-                            setPawnPromoted([activePiece, true])
-                        }
-                        setClick(0)
-                        setCheck(false)
-                        setRender(render+1)
-                        setPlayer1(!player1)
-                    }
-                }
-                else // When the king is not checked
-                {
-                    if(king_is_checked) // And the next move make the king to check
-                    {
-                        setCheck(true)
-                        if (Checkmate(current_king) === 1)
-                        {
-                            alert("It is a checkmate")
-                            Pieces[current_king]["checkmate"] = true
-                            window.location.replace("/GameOver")
-                        }
-                    }
-                    else 
-                    {
-                        if (Checkmate(current_king) === 1)
-                        {
-                            alert("It is a stalemate")
-                            window.location.replace("/GameOver")
-                        }
-                    }
-                    // console.log(activePiece)
-                    if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
-                    {
-                        setPawnPromoted([activePiece, true])
-                    }
-                    setClick(0)
-                    setPlayer1(!player1)
-                    setRender(render+1)
-                }
+                activePiece = currentPiece;
+                setClick(1);
             }
         }
         else
         {
-            setClick(0)
+            if((currentPiece && Pieces[currentPiece]["color"] === Pieces[activePiece]["color"]) || (currentPiece && Pieces[currentPiece]["color"] !== Pieces[activePiece]["color"] && !ChessMove(activePiece, dest_x, dest_y, check)) || !ChessMove(activePiece, dest_x, dest_y, check))
+            {
+                setClick(0);
+                return;
+            }
+            else
+            {
+                MakeAMove(currentPiece, activePiece, dest_x, dest_y)
+                let current_king = current_color+ "_king"
+                let opponent_king = not_current_color + "_king"
+                if(current_king === KingCheck(current_king)[0] && KingCheck(current_king)[2])
+                {
+                    alert("Invalid move")
+                    RevertBack(currentPiece, activePiece)
+                    setClick(0)
+                    return
+                }
+                if(check)
+                {
+                    setCheck(!check)
+                }
+                if(KingCheck(opponent_king)[2])
+                {
+                    setCheck(!check)
+                    if(Checkmate(opponent_king) === 1)
+                    {
+                        alert("It is a checkmate")
+                        Pieces[current_king]["checkmate"] = true
+                        window.location.replace("/GameOver")
+                    }
+                    setClick(0)
+                    setPlayer1(!player1)
+                    setRender(render+1)
+                    return
+                }
+                else if(Checkmate(opponent_king) === 1)
+                {
+                    alert("It is a stalemate")
+                    window.location.replace("/GameOver")
+                }
+                if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
+                {
+                    setPawnPromoted([activePiece, true])
+                }
+                setClick(0) 
+                setPlayer1(!player1)
+            }
         }
     }
 
+    
     function InsertIntoMatrix()
     {
         matrix = new Array(9)
@@ -231,8 +206,6 @@ function Board() {
             }
         }
     }
-
-
     InsertIntoMatrix()
 
     return (
@@ -250,7 +223,6 @@ function Board() {
         }
         {pawnPromoted[1] &&
         <div className='text-white pawn-promoted'>
-            {/* ajdjada */}
             <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"queen")}}>Queen</button>
             <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"bishop")}}>Bishop</button>
             <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"knight")}}>Knight</button>
@@ -261,3 +233,97 @@ function Board() {
 }
 
 export default Board
+
+// function Toggle (box, dest_x, dest_y) 
+//     {
+//         let currentPiece = box.getAttribute("chess-piece")
+//         let current_color = player1 ? "white" : "black"
+//         if((!currentPiece && click === 0))
+//         {
+//             return
+//         }
+//         if((currentPiece))
+//         {
+//             if((click === 0) && (current_color === Pieces[currentPiece]["color"]))
+//             {
+//                 activePiece = currentPiece
+//                 setClick(1)
+//                 return
+//             }
+//             else if((click === 1) && (Pieces[activePiece]["color"] === Pieces[currentPiece]["color"]))
+//             {
+//                 setClick(0)
+//                 return
+//             }
+//         }
+//         if((click === 1) && ChessMove(activePiece, dest_x, dest_y, check)) // If it is a valid move
+//         {
+//             MakeAMove(currentPiece, activePiece, dest_x, dest_y)
+//             let notCurrCol = current_color === "white" ? "black" : "white"
+//             let temp_king = notCurrCol + "_king"
+//             let temp = KingCheck(temp_king) 
+//             let current_king = temp[0] ? temp[0] : temp_king 
+//             let king_is_checked = temp[2]
+//             let king_color = temp[0] ? Pieces[current_king]["color"] : ""
+//             if(king_is_checked && Pieces[activePiece]["color"] === king_color) // When you deliberately want to apply check to your king
+//             {
+//                 RevertBack(currentPiece, activePiece)
+//                 alert("Invalid move")
+//                 setClick(0)
+//                 setRender(render+1)
+//             }
+//             else 
+//             {
+//                 if(check) // Once it is checked, check for the next step
+//                 {
+//                     if(king_is_checked) // If the next move give rise to the check, revert back
+//                     {
+//                         RevertBack(currentPiece, activePiece)
+//                     }
+//                     else // check got eliminated
+//                     {
+//                         if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
+//                         {
+//                             setPawnPromoted([activePiece, true])
+//                         }
+//                         setClick(0)
+//                         setCheck(false)
+//                         setRender(render+1)
+//                         setPlayer1(!player1)
+//                     }
+//                 }
+//                 else // When the king is not checked
+//                 {
+//                     if(king_is_checked) // And the next move make the king to check
+//                     {
+//                         setCheck(true)
+//                         if (Checkmate(current_king) === 1)
+//                         {
+//                             alert("It is a checkmate")
+//                             Pieces[current_king]["checkmate"] = true
+//                             window.location.replace("/GameOver")
+//                         }
+//                     }
+//                     else 
+//                     {
+//                         if (Checkmate(current_king) === 1)
+//                         {
+//                             alert("It is a stalemate")
+//                             window.location.replace("/GameOver")
+//                         }
+//                     }
+//                     if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
+//                     {
+//                         setPawnPromoted([activePiece, true])
+//                     }
+//                     setClick(0)
+//                     setPlayer1(!player1)
+//                     setRender(render+1)
+//                 }
+//             }
+//         }
+//         else
+//         {
+//             setClick(0)
+//         }
+//     }
