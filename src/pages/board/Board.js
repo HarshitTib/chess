@@ -176,8 +176,9 @@ function Board() {
                     }
                     else
                     {
-                        let temp = check ?  KingCheck() : ""
-                        let current_king = temp[0]
+                        let current_king = player1 ? "white_king" : "black_king"
+                        let temp = check ?  KingCheck(current_king) : ""
+                        current_king = temp[0]
                         let check_giver = temp[1]
                         let x = matrix_row[i]
                         let y = matrix_col[j-1]

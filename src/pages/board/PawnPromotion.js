@@ -27,7 +27,7 @@ function PawnPromotion(pawnPromoted, setPawnPromoted, setCheck, image_tag) {
     Pieces[image]["position_x"] = "-1"
     Pieces[image]["position_y"] = "-1"
     Pieces[new_image+count++] = temp
-    let check_condition = KingCheck()[2]
+    let check_condition = KingCheck(current_king)[2]
     setCheck(check_condition)
     if(Checkmate(current_king))
     {

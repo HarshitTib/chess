@@ -1,7 +1,7 @@
 import { PawnMove, RookMove, BishopMove, KnightMove, KingMove } from './ChessMove'
 import Pieces from '../../components/Pieces'
 
-function KingCheck()
+function KingCheck(current_king)
 {  
     let con = ["",[],false] // current King, Chess Piece who gives the check, check
     var king = []
