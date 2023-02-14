@@ -1,4 +1,5 @@
 import Pieces from '../../components/Pieces'
+import KingCheck from './KingCheck'
 
 export function CheckPiece(x, y) // If any chess piece is present at a particular location
 {
@@ -163,6 +164,7 @@ export function KnightMove(int_xd, int_xs, int_yd, int_ys)
 
 export function KingMove(int_xd, int_xs, int_yd, int_ys, check, activePiece)
 {
+    let rook_y
     let con = false
     let diff_x = Math.abs(int_xs - int_xd)
     let diff_y = Math.abs(int_ys - int_yd)
@@ -174,22 +176,56 @@ export function KingMove(int_xd, int_xs, int_yd, int_ys, check, activePiece)
     {
         if(int_yd > int_ys)
         {
+            Pieces[activePiece]["position_y"] = String(int_yd-1)
+            if(KingCheck(activePiece)[2]) // checking between the condition
+            {
+                Pieces[activePiece]["position_y"] = String(int_ys)
+                return false
+            }
             let temp = CheckPiece(int_xd, int_yd+1)
             if(temp && temp[0].includes("rook") && !temp[1]["moved"])
             {
+                rook_y = String(int_yd+1)
                 temp[1]["position_x"] = String(int_xd)
                 temp[1]["position_y"] = String(int_yd-1)
-                con = true
+                Pieces[activePiece]["position_y"] = String(int_yd)
+                if(KingCheck(activePiece)[2])
+                {
+                    temp[1]["position_y"] = rook_y
+                    Pieces[activePiece]["position_y"] = String(int_ys)
+                    con = false
+                }
+                else
+                {
+                    con = true
+                }
             }
         }
         else if(int_yd < int_ys && !CheckPiece(int_xd, int_yd+1))
         {
+            Pieces[activePiece]["position_y"] = String(int_yd+1)
+            if(KingCheck(activePiece)[2])
+            {
+                Pieces[activePiece]["position_y"] = String(int_ys)
+                return false
+            }
             let temp = CheckPiece(int_xd, int_yd-2)
             if(temp && temp[0].includes("rook") && !temp[1]["moved"])
             {
+                rook_y = String(int_yd-2)
                 temp[1]["position_x"] = String(int_xd)
                 temp[1]["position_y"] = String(int_yd+1)
-                con = true
+                Pieces[activePiece]["position_y"] = String(int_yd)
+                if(KingCheck(activePiece)[2])
+                {
+                    temp[1]["position_y"] = rook_y
+                    Pieces[activePiece]["position_y"] = String(int_ys)
+                    con = false
+                }
+                else
+                {
+                    con = true
+                }
             }
         }
     }
@@ -202,7 +238,11 @@ function ChessMove(activePiece, x, y, check) {
     var int_xd1 = parseInt(x) // Destination x
     var int_yd1 = parseInt(y) // Destination y
     var int_xs1 = parseInt(Pieces[activePiece]["position_x"]) // Source x
-    var int_ys1 = parseInt(Pieces[activePiece]["position_y"]) // Source y    
+    var int_ys1 = parseInt(Pieces[activePiece]["position_y"]) // Source y 
+    if(int_xd1 === int_xs1 && int_yd1 === int_ys1)
+    {
+        return false
+    }   
     if(activePiece.includes("bishop"))
     {
         cond = BishopMove(int_xd1, int_xs1, int_yd1, int_ys1)
