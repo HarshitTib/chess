@@ -77,3 +77,24 @@
 {
     color : rgba(193, 0, 0, 0.724)
 }
+.pawn-promoted
+{
+    position: absolute;
+    top: calc((100vh - (16vh+8vmin))/2);
+    left: calc((98vw - (80vw+6vmin))/2);
+    display: grid;
+    grid-template-rows: repeat(2, 8vh);
+    grid-template-columns: repeat(2, 40vw);
+    row-gap: 6vmin;
+    column-gap: 6vmin;
+    justify-content: center;
+    text-align: center;
+   
+}
+.pawn-promoted button
+{
+    width: 100%;
+    height: 100%;
+    font-size: 1.5vw;
+    background: #484848;
+}

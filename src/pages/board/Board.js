@@ -5,6 +5,15 @@ import ChessMove from './ChessMove'
 import KingCheck from './KingCheck'
 import Checkmate from './Checkmate'
 import PawnPromotion from './PawnPromotion'
+import black_rook from "../../images/black-rook.png"
+import black_knight from "../../images/black-knight.png"
+import black_bishop from "../../images/black-bishop.png"
+import black_queen from "../../images/black-queen.png"
+import white_rook from "../../images/white-rook.png"
+import white_knight from "../../images/white-knight.png"
+import white_bishop from "../../images/white-bishop.png"
+import white_queen from "../../images/white-queen.png"
+
 
 var matrix_row = ['8', '7', '6', '5', '4', '3', '2', '1']
 var matrix_col = ['1', '2', '3', '4', '5', '6', '7', '8']
@@ -238,10 +247,18 @@ function Board() {
         }
         {pawnPromoted[1] &&
         <div className='text-white pawn-promoted'>
-            <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"queen")}}>Queen</button>
-            <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"bishop")}}>Bishop</button>
-            <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"knight")}}>Knight</button>
-            <button type="" onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"rook")}}>Rook</button>
+            <button 
+            style={{backgroundImage: !player1 ? `url(${white_queen})`:  `url(${black_queen})` , backgroundRepeat:"no-repeat", backgroundPosition: "50%"}}
+            onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"queen")}}></button>
+            <button 
+            style={{backgroundImage: !player1 ? `url(${white_bishop})`:  `url(${black_bishop})` , backgroundRepeat:"no-repeat", backgroundPosition: "50%"}}
+            onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"bishop")}}></button>
+            <button 
+            style={{backgroundImage: !player1 ? `url(${white_knight})`:  `url(${black_knight})` , backgroundRepeat:"no-repeat", backgroundPosition: "50%"}}
+            onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"knight")}}></button>
+            <button
+            style={{backgroundImage: !player1 ? `url(${white_rook})`:  `url(${black_rook})` , backgroundRepeat:"no-repeat", backgroundPosition: "50%"}}
+            onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"rook")}}></button>
         </div>}
         </>
     )
@@ -249,96 +266,3 @@ function Board() {
 
 export default Board
 
-// function Toggle (box, dest_x, dest_y) 
-//     {
-//         let currentPiece = box.getAttribute("chess-piece")
-//         let current_color = player1 ? "white" : "black"
-//         if((!currentPiece && click === 0))
-//         {
-//             return
-//         }
-//         if((currentPiece))
-//         {
-//             if((click === 0) && (current_color === Pieces[currentPiece]["color"]))
-//             {
-//                 activePiece = currentPiece
-//                 setClick(1)
-//                 return
-//             }
-//             else if((click === 1) && (Pieces[activePiece]["color"] === Pieces[currentPiece]["color"]))
-//             {
-//                 setClick(0)
-//                 return
-//             }
-//         }
-//         if((click === 1) && ChessMove(activePiece, dest_x, dest_y, check)) // If it is a valid move
-//         {
-//             MakeAMove(currentPiece, activePiece, dest_x, dest_y)
-//             let notCurrCol = current_color === "white" ? "black" : "white"
-//             let temp_king = notCurrCol + "_king"
-//             let temp = KingCheck(temp_king) 
-//             let current_king = temp[0] ? temp[0] : temp_king 
-//             let king_is_checked = temp[2]
-//             let king_color = temp[0] ? Pieces[current_king]["color"] : ""
-//             if(king_is_checked && Pieces[activePiece]["color"] === king_color) // When you deliberately want to apply check to your king
-//             {
-//                 RevertBack(currentPiece, activePiece)
-//                 alert("Invalid move")
-//                 setClick(0)
-//                 setRender(render+1)
-//             }
-//             else 
-//             {
-//                 if(check) // Once it is checked, check for the next step
-//                 {
-//                     if(king_is_checked) // If the next move give rise to the check, revert back
-//                     {
-//                         RevertBack(currentPiece, activePiece)
-//                     }
-//                     else // check got eliminated
-//                     {
-//                         if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
-//                         {
-//                             setPawnPromoted([activePiece, true])
-//                         }
-//                         setClick(0)
-//                         setCheck(false)
-//                         setRender(render+1)
-//                         setPlayer1(!player1)
-//                     }
-//                 }
-//                 else // When the king is not checked
-//                 {
-//                     if(king_is_checked) // And the next move make the king to check
-//                     {
-//                         setCheck(true)
-//                         if (Checkmate(current_king) === 1)
-//                         {
-//                             alert("It is a checkmate")
-//                             Pieces[current_king]["checkmate"] = true
-//                             window.location.replace("/GameOver")
-//                         }
-//                     }
-//                     else 
-//                     {
-//                         if (Checkmate(current_king) === 1)
-//                         {
-//                             alert("It is a stalemate")
-//                             window.location.replace("/GameOver")
-//                         }
-//                     }
-//                     if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
-//                     {
-//                         setPawnPromoted([activePiece, true])
-//                     }
-//                     setClick(0)
-//                     setPlayer1(!player1)
-//                     setRender(render+1)
-//                 }
-//             }
-//         }
-//         else
-//         {
-//             setClick(0)
-//         }
-//     }
