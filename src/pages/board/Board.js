@@ -13,6 +13,8 @@ import white_rook from "../../images/white-rook.png"
 import white_knight from "../../images/white-knight.png"
 import white_bishop from "../../images/white-bishop.png"
 import white_queen from "../../images/white-queen.png"
+import GameOver from '../GameOver'
+
 
 
 var matrix_row = ['8', '7', '6', '5', '4', '3', '2', '1']
@@ -90,8 +92,10 @@ function Board() {
     const [click, setClick] = useState(0)
     const [pawnPromoted, setPawnPromoted] = useState([])
     const [player1, setPlayer1] = useState(true)
+    const [gameOver, setGameOver] = useState([false,""])
 
-    function Toggle (box, dest_x, dest_y) 
+
+    async function Toggle (box, dest_x, dest_y) 
     {
         let currentPiece = box.getAttribute("chess-piece")
         let current_color = player1 ? "white" : "black"
@@ -140,9 +144,8 @@ function Board() {
                         Pieces["black_rook1"]["moved"] = ar[3]
                         Pieces["black_rook2"]["moved"] = ar[4]
                         Pieces["black_king"]["moved"] = ar[5]
-                        alert("It is a checkmate")
                         Pieces[current_king]["checkmate"] = true
-                        window.location.replace("/GameOver")
+                        setGameOver([true, "Checkmate"])
                     }
                     setClick(0)
                     setPlayer1(!player1)
@@ -157,8 +160,7 @@ function Board() {
                     Pieces["black_rook1"]["moved"] = ar[3]
                     Pieces["black_rook2"]["moved"] = ar[4]
                     Pieces["black_king"]["moved"] = ar[5]
-                    alert("It is a stalemate")
-                    window.location.replace("/GameOver")
+                    setGameOver([true, "Stalemate"])
                 }
                 if(activePiece.includes("pawn") && (Pieces[activePiece]["position_x"] === '1' || Pieces[activePiece]["position_x"] === '8'))
                 {
@@ -234,18 +236,18 @@ function Board() {
 
     return (
         <>
-        {!pawnPromoted[1] &&
+        {!gameOver[0] && !pawnPromoted[1] &&
         <div className='matrix-design'>
             {matrix}
         </div>
         }
-        {!pawnPromoted[1] &&   
+        {!gameOver[0] && !pawnPromoted[1] &&   
         <div className='players'>
             {player1 && <div>Player 1(white) move</div>} 
             {!player1 && <div>Player 2(black) move</div>} 
         </div>
         }
-        {pawnPromoted[1] &&
+        {!gameOver[0] && pawnPromoted[1] &&
         <div className='text-white pawn-promoted'>
             <button 
             style={{backgroundImage: !player1 ? `url(${white_queen})`:  `url(${black_queen})` , backgroundRepeat:"no-repeat", backgroundPosition: "50%"}}
@@ -259,6 +261,10 @@ function Board() {
             <button
             style={{backgroundImage: !player1 ? `url(${white_rook})`:  `url(${black_rook})` , backgroundRepeat:"no-repeat", backgroundPosition: "50%"}}
             onClick={() => {PawnPromotion(pawnPromoted,setPawnPromoted,setCheck,"rook")}}></button>
+        </div>}
+        {gameOver[0] && 
+        <div>
+            <GameOver gameOver1 = {gameOver[1]} setGameOver1 = {setGameOver}/>
         </div>}
         </>
     )
