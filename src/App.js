@@ -1,5 +1,5 @@
 import './App.css';
-import Board from "./pages/Board/Board"
+import Board from "./pages/board/Board"
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import GameOver from './pages/GameOver';
