@@ -45,13 +45,14 @@
 
 .matrix-design {
     display: grid;
-    grid-template-columns: repeat(9, 5.5vw);
-    grid-template-rows: repeat(9, 5.5vw);
+    grid-template-columns: repeat(9, 4.5vw);
+    grid-template-rows: repeat(9, 4.5vw);
     justify-content: center;
-    padding: 2vw;
+    padding: 2vw 2vw 0 2vw;
     text-align: center;
     width: 94vw;
-    height: 40vw;
+    height: 38vw;
+    margin: auto;
 }
 .box-design:focus{
     background-color: #7AC74F;
@@ -64,7 +65,8 @@
 
 .players
 {
-    margin-top: 11vh;
+    /* margin-top: 11vh; */
+    position: relative;
     background-color:  #1f1f1f;
     text-align: center;
     margin-bottom: .5vw;
@@ -79,12 +81,13 @@
 }
 .pawn-promoted
 {
-    position: absolute;
-    top: calc((100vh - (16vh+8vmin))/2);
-    left: calc((98vw - (80vw+6vmin))/2);
+    position: relative;
+    top: 30vh;
+    /* top: calc((100vh - (16vh+8vmin))/2);
+    left: calc((98vw - (80vw+6vmin))/2); */
     display: grid;
-    grid-template-rows: repeat(2, 8vh);
-    grid-template-columns: repeat(2, 40vw);
+    grid-template-rows: repeat(2, 10vh);
+    grid-template-columns: repeat(2, 35vw);
     row-gap: 6vmin;
     column-gap: 6vmin;
     justify-content: center;

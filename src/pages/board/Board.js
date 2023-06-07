@@ -235,7 +235,7 @@ function Board() {
     InsertIntoMatrix()
 
     return (
-        <>
+        <div className='matrix-container'>
         {!gameOver[0] && !pawnPromoted[1] &&
         <div className='matrix-design'>
             {matrix}
@@ -266,7 +266,7 @@ function Board() {
         <div>
             <GameOver gameOver1 = {gameOver[1]} setGameOver1 = {setGameOver}/>
         </div>}
-        </>
+        </div>
     )
 }
 
